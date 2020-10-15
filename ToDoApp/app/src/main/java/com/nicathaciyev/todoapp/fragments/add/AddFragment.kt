@@ -1,18 +1,17 @@
 package com.nicathaciyev.todoapp.fragments.add
 
 import android.os.Bundle
-import android.text.TextUtils
 import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.nicathaciyev.todoapp.R
-import com.nicathaciyev.todoapp.data.models.Priority
 import com.nicathaciyev.todoapp.data.models.ToDoData
 import com.nicathaciyev.todoapp.data.viewmodel.SharedViewModel
 import com.nicathaciyev.todoapp.data.viewmodel.ToDoViewModel
 import kotlinx.android.synthetic.main.fragment_add.*
+import kotlinx.android.synthetic.main.fragment_add.view.*
 
 
 class AddFragment : Fragment() {
@@ -30,6 +29,10 @@ class AddFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_add, container, false)
         // Set menu
         setHasOptionsMenu(true)
+
+
+        view.priorities_spinner.onItemSelectedListener = mSharedViewModel.listener
+
         return view
 
     }
