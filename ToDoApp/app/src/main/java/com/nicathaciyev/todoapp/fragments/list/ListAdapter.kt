@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.nicathaciyev.todoapp.R
 import com.nicathaciyev.todoapp.data.models.Priority
@@ -27,7 +28,16 @@ class ListAdapter : RecyclerView.Adapter<ListAdapter.MyViewHolder>() {
         holder.itemView.title_txt.text = dataList[position].title
         holder.itemView.description_txt.text = dataList[position].description
 
+        val action = ListFragmentDirections.actionListFragmentToUpdateFragment(dataList[position])
+
+        holder.itemView.row_background.setOnClickListener {
+            holder.itemView.findNavController().navigate(action)
+        }
+
+
         when (dataList[position].priority) {
+
+
             Priority.HIGH -> holder.itemView.priority_indicator.setCardBackgroundColor(
                 ContextCompat.getColor(
                     holder.itemView.context,
@@ -41,7 +51,9 @@ class ListAdapter : RecyclerView.Adapter<ListAdapter.MyViewHolder>() {
             Priority.LOW -> holder.itemView.priority_indicator.setCardBackgroundColor(
                 ContextCompat.getColor(holder.itemView.context, R.color.green)
             )
+
         }
+
 
     }
 
