@@ -16,6 +16,7 @@ import com.nicathaciyev.todoapp.data.viewmodel.SharedViewModel
 import com.nicathaciyev.todoapp.data.viewmodel.ToDoViewModel
 import com.nicathaciyev.todoapp.databinding.FragmentListBinding
 import com.nicathaciyev.todoapp.fragments.list.adapter.ListAdapter
+import jp.wasabeef.recyclerview.animators.LandingAnimator
 
 
 class ListFragment : Fragment() {
@@ -60,6 +61,9 @@ class ListFragment : Fragment() {
         val recyclerView = binding.recyclerView
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(requireActivity())
+        recyclerView.itemAnimator = LandingAnimator().apply {
+            addDuration = 300
+        }
 
         // Swipe  to Delete
         swipeToDelete(recyclerView)
@@ -86,15 +90,16 @@ class ListFragment : Fragment() {
     }
 
     private fun restoreDeletedItem(view: View, deletedItem: ToDoData, position: Int) {
-        Snackbar.make(
+        val snackBar = Snackbar.make(
             view,
             "Deleted '${deletedItem.title}'",
             Snackbar.LENGTH_SHORT
         )
-            .setAction("UNDO") {
-                mToDoViewModel.insertData(deletedItem)
-                adapter.notifyDataSetChanged()
-            }.show()
+        snackBar.setAction("UNDO") {
+            mToDoViewModel.insertData(deletedItem)
+            adapter.notifyItemChanged(position)
+        }
+        snackBar.show()
     }
 
 
