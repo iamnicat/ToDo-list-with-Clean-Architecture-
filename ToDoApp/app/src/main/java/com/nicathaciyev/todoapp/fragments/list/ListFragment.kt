@@ -7,11 +7,14 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.nicathaciyev.todoapp.R
 import com.nicathaciyev.todoapp.data.viewmodel.SharedViewModel
 import com.nicathaciyev.todoapp.data.viewmodel.ToDoViewModel
 import com.nicathaciyev.todoapp.databinding.FragmentListBinding
+import com.nicathaciyev.todoapp.fragments.list.adapter.ListAdapter
 
 
 class ListFragment : Fragment() {
@@ -57,6 +60,23 @@ class ListFragment : Fragment() {
         recyclerView.adapter = adapter
         recyclerView.layoutManager = LinearLayoutManager(requireActivity())
 
+        // Swipe  to Delete
+
+        swipeToDelete(recyclerView)
+
+    }
+
+    private fun swipeToDelete(recyclerView: RecyclerView) {
+
+        val swipeToDeleteCallback = object : SwipeToDelete() {
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val deletedItem = adapter.dataList[viewHolder.adapterPosition]
+                mToDoViewModel.deleteItem(deletedItem)
+            }
+        }
+
+        val itemTouchHelper = ItemTouchHelper(swipeToDeleteCallback)
+        itemTouchHelper.attachToRecyclerView(recyclerView)
     }
 
 
