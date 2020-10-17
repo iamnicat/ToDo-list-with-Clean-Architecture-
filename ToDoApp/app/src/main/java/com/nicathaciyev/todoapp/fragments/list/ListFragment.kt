@@ -6,11 +6,12 @@ import android.view.*
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import com.nicathaciyev.todoapp.R
+import com.nicathaciyev.todoapp.data.models.ToDoData
 import com.nicathaciyev.todoapp.data.viewmodel.SharedViewModel
 import com.nicathaciyev.todoapp.data.viewmodel.ToDoViewModel
 import com.nicathaciyev.todoapp.databinding.FragmentListBinding
@@ -39,7 +40,7 @@ class ListFragment : Fragment() {
         // Setup RecyclerView
         setupRecyclerView()
 
-        mToDoViewModel.getAllData.observe(viewLifecycleOwner, Observer { data ->
+        mToDoViewModel.getAllData.observe(viewLifecycleOwner, { data ->
             mSharedViewModel.checkDatabaseEmpty(data)
             adapter.setData(data)
         })
@@ -61,7 +62,6 @@ class ListFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(requireActivity())
 
         // Swipe  to Delete
-
         swipeToDelete(recyclerView)
 
     }
@@ -71,12 +71,30 @@ class ListFragment : Fragment() {
         val swipeToDeleteCallback = object : SwipeToDelete() {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val deletedItem = adapter.dataList[viewHolder.adapterPosition]
+
+                // Delete Item
                 mToDoViewModel.deleteItem(deletedItem)
+                adapter.notifyItemRemoved(viewHolder.adapterPosition)
+
+                // Restore Item
+                restoreDeletedItem(viewHolder.itemView, deletedItem, viewHolder.adapterPosition)
             }
         }
 
         val itemTouchHelper = ItemTouchHelper(swipeToDeleteCallback)
         itemTouchHelper.attachToRecyclerView(recyclerView)
+    }
+
+    private fun restoreDeletedItem(view: View, deletedItem: ToDoData, position: Int) {
+        Snackbar.make(
+            view,
+            "Deleted '${deletedItem.title}'",
+            Snackbar.LENGTH_SHORT
+        )
+            .setAction("UNDO") {
+                mToDoViewModel.insertData(deletedItem)
+                adapter.notifyDataSetChanged()
+            }.show()
     }
 
 
