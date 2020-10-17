@@ -1,7 +1,6 @@
 package com.nicathaciyev.todoapp.data.viewmodel
 
 import android.app.Application
-import android.graphics.Color.red
 import android.text.TextUtils
 import android.view.View
 import android.widget.AdapterView
@@ -82,12 +81,5 @@ class SharedViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
-    fun parsePriorityToInt(priority: Priority): Int {
-        return when (priority) {
-            Priority.HIGH -> 0
-            Priority.MEDIUM -> 1
-            Priority.LOW -> 2
 
-        }
-    }
 }
