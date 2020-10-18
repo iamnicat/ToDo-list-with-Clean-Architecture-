@@ -8,8 +8,8 @@ import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.ItemTouchHelper
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.google.android.material.snackbar.Snackbar
 import com.nicathaciyev.todoapp.R
 import com.nicathaciyev.todoapp.data.models.ToDoData
@@ -61,7 +61,8 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
     private fun setupRecyclerView() {
         val recyclerView = binding.recyclerView
         recyclerView.adapter = adapter
-        recyclerView.layoutManager = LinearLayoutManager(requireActivity())
+        recyclerView.layoutManager =
+            StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         recyclerView.itemAnimator = LandingAnimator().apply {
             addDuration = 300
         }
@@ -115,8 +116,15 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.menu_deleteAll) {
-            confirmItemRemoval()
+        when (item.itemId) {
+            R.id.menu_deleteAll -> confirmItemRemoval()
+            R.id.menu_high_priority -> mToDoViewModel.sortByHighPriority.observe(this, {
+                adapter.setData(it)
+            })
+            R.id.menu_low_priority -> mToDoViewModel.sortByLowPriority.observe(this, {
+                adapter.setData(it)
+            })
+
         }
 
         return super.onOptionsItemSelected(item)
