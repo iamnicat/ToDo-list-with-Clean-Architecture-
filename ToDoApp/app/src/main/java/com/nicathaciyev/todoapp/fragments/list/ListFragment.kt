@@ -83,7 +83,7 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
                 adapter.notifyItemRemoved(viewHolder.adapterPosition)
 
                 // Restore Item
-                restoreDeletedItem(viewHolder.itemView, deletedItem, viewHolder.adapterPosition)
+                restoreDeletedItem(viewHolder.itemView, deletedItem)
             }
         }
 
@@ -91,7 +91,7 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
         itemTouchHelper.attachToRecyclerView(recyclerView)
     }
 
-    private fun restoreDeletedItem(view: View, deletedItem: ToDoData, position: Int) {
+    private fun restoreDeletedItem(view: View, deletedItem: ToDoData) {
         val snackBar = Snackbar.make(
             view,
             "Deleted '${deletedItem.title}'",
@@ -99,7 +99,7 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
         )
         snackBar.setAction("UNDO") {
             mToDoViewModel.insertData(deletedItem)
-            adapter.notifyItemChanged(position)
+
         }
         snackBar.show()
     }
@@ -108,6 +108,8 @@ class ListFragment : Fragment(), SearchView.OnQueryTextListener {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.list_fragment_menu, menu)
 
+
+        // SearchView logic
         val search = menu.findItem(R.id.menu_search)
         val searchView = search.actionView as? SearchView
         searchView?.isSubmitButtonEnabled = true

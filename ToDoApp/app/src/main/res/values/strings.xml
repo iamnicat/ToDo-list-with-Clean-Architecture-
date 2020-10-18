@@ -3,4 +3,19 @@
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="do_not_have_any_task">Do not have any task</string>
+    <string name="title">Title</string>
+    <string-array name="priorities">
+        <item>High Priority</item>
+        <item>Medium Priority</item>
+        <item>Low Priority</item>
+    </string-array>
+
+    <string name="description">Description</string>
+    <string name="search">Search</string>
+    <string name="sort_by">Sort by</string>
+    <string name="priority_high">Priority High</string>
+    <string name="priority_low">Priority Low</string>
+    <string name="delete">Delete</string>
+    <string name="add">Add</string>
+    <string name="update">Update</string>
 </resources>
