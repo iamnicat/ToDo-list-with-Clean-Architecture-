@@ -27,10 +27,11 @@ class AddFragment : Fragment() {
 
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_add, container, false)
+
         // Set menu
         setHasOptionsMenu(true)
 
-
+        // Spinner item listener
         view.priorities_spinner.onItemSelectedListener = mSharedViewModel.listener
 
         return view
@@ -46,8 +47,6 @@ class AddFragment : Fragment() {
         if (item.itemId == R.id.menu_add) {
             insertDataToDb()
         }
-
-
 
         return super.onOptionsItemSelected(item)
     }
@@ -72,10 +71,7 @@ class AddFragment : Fragment() {
             findNavController().navigate(R.id.action_addFragment_to_listFragment)
         } else {
             Toast.makeText(requireContext(), "Please,fill all fields!", Toast.LENGTH_SHORT).show()
-
-
         }
-
 
     }
 
