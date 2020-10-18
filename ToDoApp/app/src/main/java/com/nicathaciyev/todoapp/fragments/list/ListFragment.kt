@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -19,7 +20,7 @@ import com.nicathaciyev.todoapp.fragments.list.adapter.ListAdapter
 import jp.wasabeef.recyclerview.animators.LandingAnimator
 
 
-class ListFragment : Fragment() {
+class ListFragment : Fragment(), SearchView.OnQueryTextListener {
     private val mToDoViewModel: ToDoViewModel by viewModels()
     private val mSharedViewModel: SharedViewModel by viewModels()
     private val adapter: ListAdapter by lazy { ListAdapter() }
@@ -105,6 +106,12 @@ class ListFragment : Fragment() {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.list_fragment_menu, menu)
+
+        val search = menu.findItem(R.id.menu_search)
+        val searchView = search.actionView as? SearchView
+        searchView?.isSubmitButtonEnabled = true
+        searchView?.setOnQueryTextListener(this)
+
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -114,6 +121,35 @@ class ListFragment : Fragment() {
 
         return super.onOptionsItemSelected(item)
     }
+
+    override fun onQueryTextSubmit(query: String?): Boolean {
+        if (query != null) {
+            searchThroughDatabase(query)
+        }
+        return true
+    }
+
+
+    override fun onQueryTextChange(newText: String?): Boolean {
+        if (newText != null) {
+            searchThroughDatabase(newText)
+        }
+        return true
+    }
+
+    private fun searchThroughDatabase(query: String) {
+        val searchQuery = "%$query%"
+
+
+        mToDoViewModel.searchDatabase(searchQuery).observe(this, { list ->
+            list?.let {
+                adapter.setData(it)
+            }
+
+        })
+
+    }
+
 
     // Show AlertDialog to confirm  removal  of all item  from database table
     private fun confirmItemRemoval() {
@@ -139,4 +175,6 @@ class ListFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
+
 }
