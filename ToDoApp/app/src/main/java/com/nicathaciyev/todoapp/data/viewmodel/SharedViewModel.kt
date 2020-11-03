@@ -21,9 +21,10 @@ class SharedViewModel(application: Application) : AndroidViewModel(application) 
 
     val listener: AdapterView.OnItemSelectedListener = object : AdapterView.OnItemSelectedListener {
         override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+
             when (position) {
                 0 -> {
-                    (parent?.getChildAt(0) as TextView).setTextColor(
+                    (parent?.getChildAt(0) as? TextView)?.setTextColor(
                         ContextCompat.getColor(
                             application,
                             R.color.red
@@ -31,7 +32,7 @@ class SharedViewModel(application: Application) : AndroidViewModel(application) 
                     )
                 }
                 1 -> {
-                    (parent?.getChildAt(0) as TextView).setTextColor(
+                    (parent?.getChildAt(0) as? TextView)?.setTextColor(
                         ContextCompat.getColor(
                             application,
                             R.color.yellow
@@ -39,12 +40,15 @@ class SharedViewModel(application: Application) : AndroidViewModel(application) 
                     )
                 }
                 2 -> {
-                    (parent?.getChildAt(0) as TextView).setTextColor(
+                    (parent?.getChildAt(0) as? TextView)?.setTextColor(
                         ContextCompat.getColor(
                             application,
                             R.color.green
                         )
                     )
+                }
+                else -> {
+
                 }
             }
 
