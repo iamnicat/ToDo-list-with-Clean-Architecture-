@@ -54,7 +54,7 @@ class AddFragment : Fragment() {
     private fun insertDataToDb() {
         val mTitle = title_et.text.toString()
         val mPriority = priorities_spinner.selectedItem.toString()
-        val mDescription = description_et.text.toString()
+        val mDescription = description_et.text.toString().trimEnd()
 
         val validation = mSharedViewModel.verifyDataFromUser(mTitle, mDescription)
         if (validation) {
